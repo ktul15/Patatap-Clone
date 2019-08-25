@@ -1,3 +1,4 @@
+// an object to store all sounds and colors
 var data = {
     q: {
         sound: new Howl({
@@ -157,27 +158,32 @@ var data = {
     }
 }
 
+// an empty array to store all new circles 
 var circles = [];
 
+// function to do something when a key is pressed 
 function onKeyDown(event) {
-
+    // if pressed key is present in the data object then run the following code otherwise don't. 
     if (data[event.key]) {
-        var maxPoint = new Point(view.size.width, view.size.height);
-        var randomPoint = Point.random();
-        var point = maxPoint * randomPoint;
-        var newCircle = new Path.Circle(point, 300);
-        data[event.key].sound.play();
-        newCircle.fillColor = data[event.key].color;
-        circles.push(newCircle);
+        var maxPoint = new Point(view.size.width, view.size.height);    // A point referring to the maximum height and width of the viewport size.
+        var randomPoint = Point.random();                               // A random number.
+        var point = maxPoint * randomPoint;                             // We multiply maxPoint and randomPoint to create a random point on the screen.
+        var newCircle = new Path.Circle(point, 300);                    // We draw a circle on the random point created in the last line.
+        data[event.key].sound.play();                                   // We call a sound file from the data object referring to the key pressed.
+        newCircle.fillColor = data[event.key].color;                    // We call a color from the data object referring to the key pressed and gave it to the newCircle.
+        circles.push(newCircle);                                        // We push the newCircle into the circles array.
     }
-
 }
 
+// this function runs the code inside it on every frame.
 function onFrame(event) {
 
+    // We loop through the circles array and change the color and scale of each element of the array on every frame.
     for (var i = 0; i < circles.length; i++) {
-        circles[i].fillColor.hue += 1;
-        circles[i].scale(.9);
+        circles[i].fillColor.hue += 1;                                  // Increment the hue of the color of the ith element by 1 on each frame
+        circles[i].scale(.9);                                           // reduce the scale of the element to it's 90% on each frame.
+        
+        // remove the circle from the circles array after it's area becomes less than 1.
         if (circles[i].area < 1) {
             circles[i].remove();
             circles.splice(i, 1);
